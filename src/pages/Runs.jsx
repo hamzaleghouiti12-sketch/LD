@@ -1,67 +1,58 @@
 import { runs } from "../data/mockData";
 import { Link } from "react-router-dom";
-import { PlayCircle, CheckCircle2, XCircle, Clock, ChevronRight } from "lucide-react";
 
-const statusIcons = {
-    completado: <CheckCircle2 size={16} className="text-emerald-500" />,
-    fallido: <XCircle size={16} className="text-red-500" />,
-    en_progreso: <PlayCircle size={16} className="text-blue-500 animate-pulse" />,
-    pendiente: <Clock size={16} className="text-gray-400" />,
-};
-
-const statusStyles = {
-    completado: "bg-emerald-50 text-emerald-700 border-emerald-100",
-    fallido: "bg-red-50 text-red-700 border-red-100",
-    en_progreso: "bg-blue-50 text-blue-700 border-blue-100",
-    pendiente: "bg-gray-50 text-gray-600 border-gray-100",
+const estadoStyles = {
+    completado: "bg-emerald-50 text-emerald-700",
+    fallido: "bg-red-50 text-red-700",
+    en_progreso: "bg-blue-50 text-blue-700",
+    pendiente: "bg-gray-100 text-gray-500",
 };
 
 export default function Runs() {
     return (
-        <div className="max-w-7xl mx-auto space-y-6 animate-in fade-in duration-500">
-            <div className="flex flex-col gap-1">
-                <h2 className="text-2xl font-semibold text-gray-900 tracking-tight">Ejecuciones (Runs)</h2>
-                <p className="text-sm text-gray-500 font-medium">Historial completo de ejecuciones de automatizaciones.</p>
+        <div className="max-w-5xl mx-auto space-y-6">
+
+            {/* Page header */}
+            <div>
+                <h2 className="text-2xl font-bold text-gray-900">Ejecuciones</h2>
+                <p className="mt-1 text-sm text-gray-500">
+                    Historial completo de ejecuciones de automatizaciones.
+                </p>
             </div>
 
-            <div className="bg-white border border-orange-100/50 rounded-2xl shadow-[0_2px_15px_-3px_rgba(0,0,0,0.04)] overflow-hidden">
-                <table className="w-full text-left border-collapse">
+            {/* Table card */}
+            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+                <table className="w-full text-sm text-left">
                     <thead>
-                        <tr className="bg-orange-50/30 border-b border-orange-100/50">
-                            <th className="px-6 py-4 text-[10px] font-extrabold text-gray-400 uppercase tracking-[0.2em] w-32">ID</th>
-                            <th className="px-6 py-4 text-[10px] font-extrabold text-gray-400 uppercase tracking-[0.2em]">Automatización</th>
-                            <th className="px-6 py-4 text-[10px] font-extrabold text-gray-400 uppercase tracking-[0.2em]">Estado</th>
+                        <tr className="border-b border-gray-100 bg-gray-50/60">
+                            <th className="px-6 py-3 text-xs font-semibold text-gray-400 uppercase tracking-wider">ID</th>
+                            <th className="px-6 py-3 text-xs font-semibold text-gray-400 uppercase tracking-wider">Automatización</th>
+                            <th className="px-6 py-3 text-xs font-semibold text-gray-400 uppercase tracking-wider">Estado</th>
                         </tr>
                     </thead>
-                    <tbody className="divide-y divide-orange-100/20">
-                        {(runs || []).map((run) => (
-                            <tr key={run.id} className="hover:bg-orange-50/20 transition-colors duration-150 group">
+                    <tbody className="divide-y divide-gray-50">
+                        {runs.map((run) => (
+                            <tr key={run.id} className="hover:bg-gray-50/50 transition-colors">
                                 <td className="px-6 py-4">
                                     <Link
                                         to={`/runs/${run.id}`}
-                                        className="group flex items-center gap-2 text-xs font-mono font-bold text-blue-600 bg-blue-50/50 px-2 py-1 rounded-md border border-blue-100 hover:bg-blue-600 hover:text-white transition-all w-fit"
+                                        className="font-mono text-xs font-bold text-primary-600 hover:text-primary-700 hover:underline"
                                     >
                                         {run.id}
-                                        <ChevronRight size={12} className="opacity-0 group-hover:opacity-100 transition-opacity" />
                                     </Link>
                                 </td>
-                                <td className="px-6 py-4 font-medium text-gray-700">
-                                    {run.automatizacion_id}
-                                </td>
+                                <td className="px-6 py-4 text-gray-700 font-medium">{run.automatizacion_id}</td>
                                 <td className="px-6 py-4">
-                                    <div className={`
-                    inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold border
-                    ${statusStyles[run.estado]}
-                  `}>
-                                        {statusIcons[run.estado]}
-                                        <span className="capitalize">{run.estado.replace("_", " ")}</span>
-                                    </div>
+                                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold ${estadoStyles[run.estado] ?? "bg-gray-100 text-gray-500"}`}>
+                                        {run.estado.replace("_", " ")}
+                                    </span>
                                 </td>
                             </tr>
                         ))}
                     </tbody>
                 </table>
             </div>
+
         </div>
     );
 }

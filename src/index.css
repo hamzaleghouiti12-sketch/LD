@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 @import "tailwindcss";
 
 @theme {
@@ -5,12 +6,12 @@
     --color-primary-100: #ffedd5;
     --color-primary-500: #f97316;
     --color-primary-600: #ea580c;
-    --color-cream: #fdfcf7;
-    /* Refined cream background */
+    --color-cream: #f8f7f4;
 }
 
 @layer base {
     body {
-        @apply font-['Inter', sans-serif] bg-cream text-gray-900 antialiased;
+        font-family: 'Inter', sans-serif;
+        @apply bg-cream text-gray-900 antialiased;
     }
 }

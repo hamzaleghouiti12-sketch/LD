@@ -169,8 +169,26 @@ export const errors = [
         tipo: "Conectividad",
         mensaje: "Timeout al conectar con la API externa.",
         gravedad: "alta",
-        fecha: "2026-02-19T09:15:58Z"
-    }
+        fecha: "2026-02-19T09:15:58Z",
+    },
+    {
+        id: "err-002",
+        run_id: "run-001",
+        paso_id: "paso-001",
+        tipo: "Validación",
+        mensaje: "El campo email no tiene un formato válido.",
+        gravedad: "media",
+        fecha: "2026-02-19T08:00:12Z",
+    },
+    {
+        id: "err-003",
+        run_id: "run-004",
+        paso_id: "paso-007",
+        tipo: "Autenticación",
+        mensaje: "Token de acceso expirado al clasificar documento.",
+        gravedad: "alta",
+        fecha: "2026-02-18T14:00:31Z",
+    },
 ];
 
 export const leads = [
@@ -180,7 +198,7 @@ export const leads = [
         empresa: "Tech Solutions",
         email: "juan@tech.com",
         score: 85,
-        estado: "enriquecido"
+        estado: "enriquecido",
     },
     {
         id: "lead-002",
@@ -188,6 +206,22 @@ export const leads = [
         empresa: "Data Corp",
         email: "m.garcia@datacorp.io",
         score: null,
-        estado: "pendiente"
-    }
+        estado: "pendiente",
+    },
+    {
+        id: "lead-003",
+        nombre: "Carlos Romero",
+        empresa: "Inversiones Sur",
+        email: "c.romero@inversur.com",
+        score: 72,
+        estado: "enriquecido",
+    },
+    {
+        id: "lead-004",
+        nombre: "Laura Vidal",
+        empresa: "Nexo Digital",
+        email: "lvidal@nexodigital.es",
+        score: 91,
+        estado: "enriquecido",
+    },
 ];
