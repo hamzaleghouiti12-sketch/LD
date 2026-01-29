@@ -51,3 +51,24 @@ export function getTotalLeads(leads) {
     if (!Array.isArray(leads)) return 0;
     return leads.length;
 }
+
+/**
+ * Returns the number of failed runs.
+ * A run is considered failed if estado === "fallido".
+ * @param {Array} runs - Array of run objects from mockData.js
+ * @returns {number}
+ */
+export function getFailedRunsCount(runs) {
+    if (!Array.isArray(runs)) return 0;
+    return runs.filter((run) => run.estado === "fallido").length;
+}
+
+/**
+ * Returns the total number of processed leads.
+ * @param {Array} leads - Array of lead objects from mockData.js
+ * @returns {number}
+ */
+export function getProcessedLeadsCount(leads) {
+    if (!Array.isArray(leads)) return 0;
+    return leads.length;
+}

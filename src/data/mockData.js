@@ -194,6 +194,7 @@ export const errors = [
 export const leads = [
     {
         id: "lead-001",
+        run_id: "run-001",
         nombre: "Juan Perez",
         empresa: "Tech Solutions",
         email: "juan@tech.com",
@@ -202,6 +203,7 @@ export const leads = [
     },
     {
         id: "lead-002",
+        run_id: "run-001",
         nombre: "Maria Garcia",
         empresa: "Data Corp",
         email: "m.garcia@datacorp.io",
@@ -210,6 +212,7 @@ export const leads = [
     },
     {
         id: "lead-003",
+        run_id: "run-002",
         nombre: "Carlos Romero",
         empresa: "Inversiones Sur",
         email: "c.romero@inversur.com",
@@ -218,6 +221,7 @@ export const leads = [
     },
     {
         id: "lead-004",
+        run_id: "run-004",
         nombre: "Laura Vidal",
         empresa: "Nexo Digital",
         email: "lvidal@nexodigital.es",

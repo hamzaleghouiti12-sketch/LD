@@ -1,5 +1,5 @@
 import { useParams, Link } from "react-router-dom";
-import { runs, pasos } from "../data/mockData";
+import { runs, pasos, leads } from "../data/mockData";
 
 const pasoEstadoStyles = {
     ok: "bg-emerald-50 text-emerald-700",
@@ -25,6 +25,8 @@ export default function RunDetail() {
     const runSteps = pasos
         .filter((p) => p.run_id === id)
         .sort((a, b) => a.orden - b.orden);
+
+    const runLeads = leads.filter((l) => l.run_id === id);
 
     return (
         <div className="max-w-5xl mx-auto space-y-8">
@@ -95,6 +97,55 @@ export default function RunDetail() {
                                 </div>
                             </div>
                         ))
+                    )}
+                </div>
+            </div>
+
+            {/* Leads procesados en esta ejecución */}
+            <div className="space-y-3">
+                <h3 className="text-base font-bold text-gray-900">Leads procesados en esta ejecución</h3>
+
+                <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+                    {runLeads.length === 0 ? (
+                        <p className="px-6 py-8 text-sm text-center text-gray-400">
+                            No hay leads asociados a esta ejecución.
+                        </p>
+                    ) : (
+                        <table className="w-full text-sm">
+                            <thead>
+                                <tr className="border-b border-gray-100">
+                                    {["Nombre", "Email", "Score", "Estado"].map((col) => (
+                                        <th
+                                            key={col}
+                                            className="px-6 py-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-widest"
+                                        >
+                                            {col}
+                                        </th>
+                                    ))}
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-gray-50">
+                                {runLeads.map((lead) => (
+                                    <tr key={lead.id} className="hover:bg-gray-50/50 transition-colors">
+                                        <td className="px-6 py-3 font-semibold text-gray-800">{lead.nombre}</td>
+                                        <td className="px-6 py-3 text-gray-500">{lead.email}</td>
+                                        <td className="px-6 py-3 text-gray-700">
+                                            {lead.score !== null ? lead.score : <span className="text-gray-300">—</span>}
+                                        </td>
+                                        <td className="px-6 py-3">
+                                            <span
+                                                className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold ${lead.estado === "enriquecido"
+                                                    ? "bg-emerald-50 text-emerald-700"
+                                                    : "bg-gray-100 text-gray-400"
+                                                    }`}
+                                            >
+                                                {lead.estado}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
                     )}
                 </div>
             </div>
