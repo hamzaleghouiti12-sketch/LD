@@ -20,3 +20,20 @@ If you are developing a production application, we recommend using TypeScript wi
 Leed-dashboard
 
 e0af60a6691f0bcc0f10ef3335c1126922332a82
+
+## API / Backend Config
+
+The project is configured to use a real backend API via Vite environment variables. 
+To run the app locally, you must create a `.env.development` file in the root directory:
+
+```env
+VITE_API_URL=http://localhost:3000/api
+```
+
+For production, create `.env.production`:
+
+```env
+VITE_API_URL=https://your-backend-url.com/api
+```
+
+If the backend is unreachable or returns networking errors, the API layer (`src/services/api.js`) will gracefully fallback to injecting `mockData.js` so you can continue developing the UI.

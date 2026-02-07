@@ -1,13 +1,26 @@
 import { useState } from 'react'
-import { errors } from '../data/mockData'
+import { useAutomationData } from '../hooks/useAutomationData.js'
 import { AlertTriangle, AlertOctagon } from 'lucide-react'
 
 export default function Errors() {
+    const { errors, loading } = useAutomationData()
     const [filtro, setFiltro] = useState("todos")
+
+    if (loading) {
+        return (
+            <div className="page-container">
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: 200, color: 'var(--color-ink-muted)', fontSize: 13 }}>
+                    Cargando datos…
+                </div>
+            </div>
+        )
+    }
+
     // mockData uses `critico` (boolean); derive gravedad: true → "alta", false → "baja"
     const erroresFiltrados = filtro === "todos"
         ? errors
         : errors.filter(e => (e.critico ? "alta" : "baja") === filtro)
+
     return (
         <div className="page-container">
             <div className="page-header animate-fade-up">

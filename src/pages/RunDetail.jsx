@@ -1,5 +1,5 @@
 import { useParams, Link } from 'react-router-dom'
-import { runs, runSteps } from '../data/mockData'
+import { useAutomationData } from '../hooks/useAutomationData.js'
 import StatusBadge from '../components/StatusBadge'
 import { CheckCircle, XCircle, Clock, ChevronLeft } from 'lucide-react'
 
@@ -18,7 +18,32 @@ const stepDotStyle = (estado) => {
 
 export default function RunDetail() {
     const { id } = useParams()
-    const run = runs.find(r => r.id === id) || runs[0]
+    const { runs, runSteps, loading } = useAutomationData()
+
+    if (loading) {
+        return (
+            <div className="page-container">
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: 200, color: 'var(--color-ink-muted)', fontSize: 13 }}>
+                    Cargando datos…
+                </div>
+            </div>
+        )
+    }
+
+    const run = runs.find(r => r.id === id)
+
+    if (!run) {
+        return (
+            <div className="page-container">
+                <div style={{ textAlign: 'center', paddingTop: 60 }}>
+                    <p style={{ fontSize: 16, color: 'var(--color-ink-muted)', marginBottom: 16 }}>Run no encontrado: <strong>{id}</strong></p>
+                    <Link to="/runs" className="btn btn-outline"><ChevronLeft size={14} /> Volver a Ejecuciones</Link>
+                </div>
+            </div>
+        )
+    }
+
+    const leads = [] // leads procesados disponibles vía hook en páginas padre; aquí sólo mostramos steps
 
     return (
         <div className="page-container">

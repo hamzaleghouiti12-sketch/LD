@@ -1,11 +1,14 @@
 import React from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Layout from './components/Layout'
+import PrivateRoute from './components/PrivateRoute'
 import Dashboard from './pages/Dashboard'
+import Login from './pages/Login'
 import Runs from './pages/Runs'
 import RunDetail from './pages/RunDetail'
 import Errors from './pages/Errors'
 import Leads from './pages/Leads'
+import LeadDetail from './pages/LeadDetail'
 
 class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -91,12 +94,14 @@ export default function App() {
     <ErrorBoundary>
       <BrowserRouter>
         <Routes>
-          <Route element={<Layout />}>
+          <Route path="/login" element={<Login />} />
+          <Route element={<PrivateRoute><Layout /></PrivateRoute>}>
             <Route path="/" element={<Dashboard />} />
             <Route path="/runs" element={<Runs />} />
             <Route path="/runs/:id" element={<RunDetail />} />
             <Route path="/errors" element={<Errors />} />
             <Route path="/leads" element={<Leads />} />
+            <Route path="/leads/:id" element={<LeadDetail />} />
           </Route>
         </Routes>
       </BrowserRouter>

@@ -1,7 +1,7 @@
-import { Outlet, NavLink, useLocation } from 'react-router-dom'
+import { Outlet, NavLink, useLocation, useNavigate } from 'react-router-dom'
 import {
     LayoutDashboard, Play, AlertTriangle, Users,
-    Settings, Bell, Search, HelpCircle, Zap
+    Settings, Bell, Search, HelpCircle, Zap, LogOut
 } from 'lucide-react'
 import '../App.css'
 
@@ -26,6 +26,12 @@ const topLinks = [
 
 export default function Layout() {
     const location = useLocation()
+    const navigate = useNavigate()
+
+    const handleLogout = () => {
+        sessionStorage.removeItem('token')
+        navigate('/login')
+    }
 
     return (
         <div className="app-shell">
@@ -57,6 +63,10 @@ export default function Layout() {
                             <span className="tooltip">{label}</span>
                         </button>
                     ))}
+                    <button className="sidebar-item" onClick={handleLogout} style={{ color: '#ef4444' }}>
+                        <LogOut size={18} />
+                        <span className="tooltip">Cerrar Sesión</span>
+                    </button>
                 </div>
             </aside>
 

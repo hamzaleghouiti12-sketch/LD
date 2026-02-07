@@ -1,4 +1,5 @@
-import { leads } from '../data/mockData'
+import { Link } from 'react-router-dom'
+import { useAutomationData } from '../hooks/useAutomationData.js'
 import { Users, Download } from 'lucide-react'
 
 function ScorePill({ score }) {
@@ -27,6 +28,18 @@ const estadoStyle = {
 }
 
 export default function Leads() {
+    const { leads, loading } = useAutomationData()
+
+    if (loading) {
+        return (
+            <div className="page-container">
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: 200, color: 'var(--color-ink-muted)', fontSize: 13 }}>
+                    Cargando datos…
+                </div>
+            </div>
+        )
+    }
+
     return (
         <div className="page-container">
             <div className="page-header animate-fade-up" style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
@@ -70,7 +83,9 @@ export default function Leads() {
                                                 }}>
                                                     {lead.nombre.split(' ').map(n => n[0]).join('').slice(0, 2)}
                                                 </div>
-                                                <span style={{ fontWeight: 500, color: 'var(--color-ink)' }}>{lead.nombre}</span>
+                                                <Link to={`/leads/${lead.id}`} style={{ fontWeight: 500, color: 'var(--color-ink)', textDecoration: 'none' }}>
+                                                    {lead.nombre}
+                                                </Link>
                                             </div>
                                         </td>
                                         <td style={{ fontWeight: 500 }}>{lead.empresa}</td>
