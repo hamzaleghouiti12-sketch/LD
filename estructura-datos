@@ -1,0 +1,374 @@
+Objetivo técnico del panel
+
+Permitir a un dueño ver en tiempo real:
+
+qué automatización se ha disparado
+
+qué datos han entrado
+
+cómo se han transformado
+
+si hay errores
+
+qué calidad tiene el lead
+
+qué resultado produjo
+
+🧠 Arquitectura lógica de datos (visión rápida)
+Empresa
+ └─ Automatizaciones
+      └─ Ejecuciones (runs)
+            └─ Pasos (steps)
+            └─ Errores
+            └─ KPIs generados
+            └─ Leads / documentos procesados
+
+1. Tabla: Empresas (clientes)
+{
+  "id": "uuid",
+  "name": "string",
+  "industry": "string",
+  "timezone": "string",
+  "created_at": "datetime",
+  "status": "active | inactive"
+}
+
+2. Tabla: Automatizaciones
+
+Cada workflow de n8n.
+
+{
+  "id": "uuid",
+  "company_id": "uuid",
+  "name": "string",
+  "description": "string",
+  "trigger_type": "webhook | schedule | manual",
+  "webhook_url": "string",
+  "is_active": "boolean",
+  "version": "string",
+  "created_at": "datetime",
+  "updated_at": "datetime"
+}
+
+3. Tabla: Ejecuciones de automatización (Workflow Runs)
+
+Esto es el CORE de tu dashboard.
+
+{
+  "id": "uuid",
+  "automation_id": "uuid",
+
+  "triggered_by": "webhook | manual_button | scheduler",
+  "trigger_payload_hash": "string",
+
+  "started_at": "datetime",
+  "finished_at": "datetime",
+
+  "status": "running | success | failed | partial",
+
+  "total_steps": "integer",
+  "successful_steps": "integer",
+  "failed_steps": "integer",
+
+  "processing_time_ms": "integer",
+
+  "input_bucket_path": "string",
+  "output_bucket_path": "string"
+}
+
+4. Tabla: Pasos de ejecución (Steps)
+
+Cada nodo importante de tu workflow.
+
+{
+  "id": "uuid",
+  "run_id": "uuid",
+
+  "step_key": "string", 
+  "step_type": "llm | filter | enrichment | deduplication | scoring | routing | email | sheet_write",
+
+  "started_at": "datetime",
+  "finished_at": "datetime",
+
+  "status": "success | failed | skipped",
+
+  "input_snapshot_path": "string",
+  "output_snapshot_path": "string",
+
+  "execution_time_ms": "integer"
+}
+
+
+Esto permite:
+
+ver en el panel cada fase
+
+reproducir el flujo visualmente
+
+5. Tabla: Errores de ejecución
+{
+  "id": "uuid",
+  "run_id": "uuid",
+  "step_id": "uuid",
+
+  "error_type": "llm | api | validation | timeout | mapping | unknown",
+  "error_code": "string",
+
+  "message": "string",
+  "raw_payload_path": "string",
+
+  "created_at": "datetime",
+
+  "severity": "low | medium | high | critical"
+}
+
+6. Tabla: Leads procesados
+
+Lead ya normalizado después de tu primer “message to model”.
+
+{
+  "id": "uuid",
+  "run_id": "uuid",
+
+  "lead_type": "buyer | seller",
+
+  "full_name": "string",
+  "email": "string",
+  "phone": "string",
+
+  "source_channel": "string",
+
+  "zone": "string",
+
+  "intent_summary": "string",
+
+  "budget_min": "decimal",
+  "budget_max": "decimal",
+
+  "property_price": "decimal",
+
+  "raw_lead_bucket_path": "string",
+  "normalized_lead_bucket_path": "string",
+
+  "created_at": "datetime"
+}
+
+7. Tabla: Control de duplicados
+{
+  "id": "uuid",
+  "lead_id": "uuid",
+
+  "duplicate_of_lead_id": "uuid",
+
+  "deduplication_rule": "email | phone | llm_similarity",
+
+  "created_at": "datetime"
+}
+
+8. Tabla: Scoring del lead
+
+Tu sistema de dos códigos por tipo.
+
+{
+  "id": "uuid",
+  "lead_id": "uuid",
+
+  "model_version": "string",
+
+  "price_score": "integer",
+  "intent_score": "integer",
+  "zone_score": "integer",
+  "data_quality_score": "integer",
+
+  "custom_filters_score": "integer",
+
+  "final_score": "integer",
+
+  "is_qualified": "boolean",
+
+  "threshold_used": "integer",
+
+  "scored_at": "datetime"
+}
+
+9. Tabla: Clasificación final del lead
+{
+  "id": "uuid",
+  "lead_id": "uuid",
+
+  "classification": "qualified | unqualified | trash",
+
+  "destination": "qualified_sheet | trash_sheet",
+
+  "status": "first_contact | contacted | replied | discarded",
+
+  "created_at": "datetime"
+}
+
+10. Tabla: Emails generados por IA
+{
+  "id": "uuid",
+  "lead_id": "uuid",
+  "run_id": "uuid",
+
+  "email_type": "buyer | seller",
+
+  "subject": "string",
+  "body": "string",
+
+  "sent_to": "string",
+
+  "sent_at": "datetime",
+
+  "status": "sent | failed | queued"
+}
+
+11. Tabla: Eventos de Webhook (entrada desde la app)
+
+Esto es clave para tu botón de “disparar automatización”.
+
+{
+  "id": "uuid",
+  "automation_id": "uuid",
+
+  "source_app": "string",
+
+  "http_method": "POST",
+
+  "headers_snapshot_path": "string",
+  "payload_snapshot_path": "string",
+
+  "received_at": "datetime",
+
+  "linked_run_id": "uuid"
+}
+
+12. Tabla: Buckets / storage lógico
+
+Para que Antigravity pueda navegar datos.
+
+{
+  "id": "uuid",
+
+  "run_id": "uuid",
+
+  "bucket_type": "raw_input | normalized | llm_outputs | errors | reports",
+
+  "path": "string",
+
+  "created_at": "datetime"
+}
+
+13. Tabla: KPIs por ejecución
+
+KPIs de proceso, no de negocio.
+
+{
+  "id": "uuid",
+  "run_id": "uuid",
+
+  "total_leads": "integer",
+  "qualified_leads": "integer",
+  "unqualified_leads": "integer",
+
+  "leads_without_phone": "integer",
+  "duplicate_leads": "integer",
+
+  "avg_processing_time_ms": "integer",
+
+  "error_count": "integer",
+
+  "llm_calls": "integer",
+
+  "created_at": "datetime"
+}
+
+14. Tabla: KPIs agregados (semanales)
+
+Para tu informe automático.
+
+{
+  "id": "uuid",
+  "company_id": "uuid",
+
+  "week_start": "date",
+  "week_end": "date",
+
+  "total_runs": "integer",
+
+  "total_leads_processed": "integer",
+
+  "total_qualified": "integer",
+
+  "qualification_rate": "decimal",
+
+  "avg_run_time_ms": "integer",
+
+  "total_errors": "integer",
+
+  "automations_used": "integer",
+
+  "generated_at": "datetime"
+}
+
+15. Tabla: Informes generados
+{
+  "id": "uuid",
+  "company_id": "uuid",
+
+  "period": "weekly",
+
+  "report_bucket_path": "string",
+
+  "sent_to": "string",
+
+  "created_at": "datetime"
+}
+
+🔗 Relaciones principales
+
+1 empresa → N automatizaciones
+
+1 automatización → N runs
+
+1 run → N steps
+
+1 run → N leads
+
+1 lead → 1 scoring
+
+1 lead → N emails
+
+1 run → 1 KPI de ejecución
+
+1 empresa → N KPI semanales
+
+🧩 ¿De dónde vienen los datos?
+
+Entradas
+
+Webhook desde la app
+
+Drive (documentos)
+
+formularios
+
+CRM externo
+
+Todo entra como:
+
+→ Webhook event
+→ Bucket raw_input
+→ Run
+
+🔌 ¿Cómo se conecta con tu sistema real?
+
+Flujo realista:
+
+APP
+ → webhook n8n
+ → guarda evento
+ → crea run
+ → ejecuta workflow
+ → va enviando step events al backend
+ → dashboard se alimenta por run_id
