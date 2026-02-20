@@ -38,6 +38,7 @@ export function getTotalSteps(steps) {
  * @returns {number}
  */
 export function getTotalErrors(errors) {
+    if (!Array.isArray(errors)) return 0;
     return errors.length;
 }
 
@@ -47,5 +48,6 @@ export function getTotalErrors(errors) {
  * @returns {number}
  */
 export function getTotalLeads(leads) {
+    if (!Array.isArray(leads)) return 0;
     return leads.length;
 }

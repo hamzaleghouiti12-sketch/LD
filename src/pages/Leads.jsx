@@ -30,7 +30,7 @@ export default function Leads() {
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-orange-100/20">
-                        {leads.map((lead) => (
+                        {(leads || []).map((lead) => (
                             <tr key={lead.id} className="hover:bg-orange-50/10 transition-colors duration-150">
                                 <td className="px-6 py-4">
                                     <div className="flex items-center gap-3">

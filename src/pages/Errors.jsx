@@ -33,7 +33,7 @@ export default function Errors() {
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-orange-100/20">
-                        {errors.map((error) => (
+                        {(errors || []).map((error) => (
                             <tr key={error.id} className="hover:bg-orange-50/10 transition-colors duration-150">
                                 <td className="px-6 py-4">
                                     <span className="text-sm font-bold text-gray-700">{error.tipo}</span>

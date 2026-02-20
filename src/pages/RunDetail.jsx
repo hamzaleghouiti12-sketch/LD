@@ -19,9 +19,6 @@ const stepIcons = {
 export default function RunDetail() {
     const { id } = useParams();
     const run = runs.find((r) => r.id === id);
-    const runSteps = pasos
-        .filter((p) => p.run_id === id)
-        .sort((a, b) => a.orden - b.orden);
 
     if (!run) {
         return (
@@ -31,6 +28,10 @@ export default function RunDetail() {
             </div>
         );
     }
+
+    const runSteps = pasos
+        .filter((p) => p.run_id === id)
+        .sort((a, b) => a.orden - b.orden);
 
     return (
         <div className="max-w-5xl mx-auto space-y-10 animate-in fade-in slide-in-from-bottom-2 duration-500">

@@ -34,7 +34,7 @@ export default function Runs() {
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-orange-100/20">
-                        {runs.map((run) => (
+                        {(runs || []).map((run) => (
                             <tr key={run.id} className="hover:bg-orange-50/20 transition-colors duration-150 group">
                                 <td className="px-6 py-4">
                                     <Link
