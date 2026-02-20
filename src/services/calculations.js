@@ -31,3 +31,21 @@ export function getSuccessRate(runs) {
 export function getTotalSteps(steps) {
     return steps.length;
 }
+
+/**
+ * Returns the total number of errors.
+ * @param {Array} errors - Array of error objects from mockData.js
+ * @returns {number}
+ */
+export function getTotalErrors(errors) {
+    return errors.length;
+}
+
+/**
+ * Returns the total number of leads.
+ * @param {Array} leads - Array of lead objects from mockData.js
+ * @returns {number}
+ */
+export function getTotalLeads(leads) {
+    return leads.length;
+}

@@ -8,7 +8,7 @@ export default function Layout({ children }) {
     const [activeItem, setActiveItem] = useState("dashboard");
 
     return (
-        <div className="flex min-h-screen bg-gray-50">
+        <div className="flex min-h-screen bg-cream">
 
             {/* ── Sidebar ── */}
             <Sidebar activeItem={activeItem} onSelect={setActiveItem} />
@@ -17,11 +17,14 @@ export default function Layout({ children }) {
             <div className="flex flex-col flex-1 overflow-hidden">
 
                 {/* Top bar */}
-                <header className="h-14 flex items-center justify-between px-6 bg-white border-b border-gray-200">
-                    <h1 className="text-sm font-semibold text-gray-700 capitalize tracking-wide">
+                <header className="h-14 flex items-center justify-between px-8 bg-white/80 backdrop-blur-md border-b border-orange-100/30 shadow-[0_1px_4px_rgba(0,0,0,0.01)]">
+                    <h1 className="text-sm font-bold text-gray-800 capitalize tracking-wide">
                         {activeItem}
                     </h1>
-                    <span className="text-xs text-gray-400">LEED Dashboard</span>
+                    <div className="flex items-center gap-2">
+                        <div className="w-1.5 h-1.5 rounded-full bg-orange-500 animate-pulse" />
+                        <span className="text-[10px] font-extrabold text-orange-400 uppercase tracking-widest">Live System</span>
+                    </div>
                 </header>
 
                 {/* Page content */}

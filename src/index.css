@@ -1,1 +1,16 @@
 @import "tailwindcss";
+
+@theme {
+    --color-primary-50: #fff7ed;
+    --color-primary-100: #ffedd5;
+    --color-primary-500: #f97316;
+    --color-primary-600: #ea580c;
+    --color-cream: #fdfcf7;
+    /* Refined cream background */
+}
+
+@layer base {
+    body {
+        @apply font-['Inter', sans-serif] bg-cream text-gray-900 antialiased;
+    }
+}

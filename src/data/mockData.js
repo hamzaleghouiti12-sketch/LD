@@ -1,6 +1,6 @@
 // ─────────────────────────────────────────────
 // MOCK DATA — LEED Dashboard
-// Scope: automatizaciones, runs, pasos
+// Scope: automatizaciones, runs, pasos, errors, leads
 // ─────────────────────────────────────────────
 
 export const automatizaciones = [
@@ -159,4 +159,35 @@ export const pasos = [
         duracion_seg: null,
         mensaje: "Run pendiente de inicio.",
     },
+];
+
+export const errors = [
+    {
+        id: "err-001",
+        run_id: "run-002",
+        paso_id: "paso-004",
+        tipo: "Conectividad",
+        mensaje: "Timeout al conectar con la API externa.",
+        gravedad: "alta",
+        fecha: "2026-02-19T09:15:58Z"
+    }
+];
+
+export const leads = [
+    {
+        id: "lead-001",
+        nombre: "Juan Perez",
+        empresa: "Tech Solutions",
+        email: "juan@tech.com",
+        score: 85,
+        estado: "enriquecido"
+    },
+    {
+        id: "lead-002",
+        nombre: "Maria Garcia",
+        empresa: "Data Corp",
+        email: "m.garcia@datacorp.io",
+        score: null,
+        estado: "pendiente"
+    }
 ];
