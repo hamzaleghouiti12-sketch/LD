@@ -1,0 +1,125 @@
+PROMPT 2 — Completar KPIs globales
+Actúa como desarrollador senior.
+
+Objetivo:
+Completar los KPIs globales que faltan en el dashboard.
+
+Actualmente existen:
+totalRuns y successRate.
+
+Implementa en:
+src/services/calculations.js
+
+Dos nuevas funciones:
+
+- getFailedRunsCount(runs)
+- getProcessedLeadsCount(leads)
+
+Después:
+
+Conéctalas en:
+src/pages/Dashboard.jsx
+
+Y muestra dos nuevas tarjetas KPI:
+
+- Fallos
+- Leads procesados
+
+Los valores deben calcularse dinámicamente, nunca hardcodeados.
+
+No cambies el resto de KPIs existentes.
+📈 PROMPT 3 — KPIs semanales
+Actúa como desarrollador senior.
+
+Objetivo:
+Añadir KPIs semanales agregados por fecha.
+
+Implementa en:
+src/services/calculations.js
+
+Una función:
+
+getWeeklyKPIs(runs)
+
+Debe devolver un array con:
+week, totalRuns, successRuns, failedRuns
+
+Usa la fecha de cada run.
+
+Después crea en:
+src/pages/Dashboard.jsx
+
+Un bloque nuevo:
+"Actividad semanal"
+
+Renderiza los datos en una tabla simple o gráfico básico (si ya existe librería).
+
+No instales librerías nuevas.
+No rompas el dashboard actual.
+⚠️ PROMPT 4 — Filtros en la vista de errores
+Actúa como desarrollador senior.
+
+Objetivo:
+Añadir filtros a la vista de errores.
+
+En:
+src/pages/Errors.jsx
+
+Implementa:
+
+- estado local filter
+- un <select> encima de la tabla
+
+Debe permitir filtrar por:
+- todos
+- severidad
+- tipo de error (si existe la propiedad)
+
+Filtra el array antes del map.
+
+No modifiques el esquema de datos.
+No cambies el diseño general.
+Solo añade el filtro.
+🔴 PROMPT 5 — Preparar arquitectura tiempo real + API
+
+(Este es clave para que luego puedas conectar n8n / webhooks)
+
+Actúa como desarrollador senior.
+
+Objetivo:
+Preparar la arquitectura para datos en tiempo real y futura conexión a automatizaciones reales.
+
+1. Crea:
+src/services/api.js
+
+Debe exportar funciones stub:
+
+getRuns()
+getLeads()
+getErrors()
+
+Por ahora deben devolver los datos de mockData internamente.
+
+2. Crea:
+src/hooks/useAutomationData.js
+
+Este hook debe:
+
+- usar useState
+- usar useEffect
+- hacer polling cada 5 segundos
+- obtener los datos usando api.js
+
+Debe devolver:
+{ runs, leads, errors }
+
+3. Sustituye en:
+
+src/pages/Dashboard.jsx
+src/pages/Runs.jsx
+
+el acceso directo a mockData por el hook useAutomationData.
+
+No elimines mockData.
+No conectes todavía a backend real.
+Solo deja preparada la arquitectura.
