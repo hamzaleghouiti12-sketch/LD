@@ -1,58 +1,79 @@
-import { runs } from "../data/mockData";
-import { Link } from "react-router-dom";
-
-const estadoStyles = {
-    completado: "bg-emerald-50 text-emerald-700",
-    fallido: "bg-red-50 text-red-700",
-    en_progreso: "bg-blue-50 text-blue-700",
-    pendiente: "bg-gray-100 text-gray-500",
-};
+import { Link } from 'react-router-dom'
+import StatusBadge from '../components/StatusBadge'
+import { useAutomationData } from '../hooks/useAutomationData.js'
+import { Play, Filter } from 'lucide-react'
 
 export default function Runs() {
-    return (
-        <div className="max-w-5xl mx-auto space-y-6">
+    const { runs, loading } = useAutomationData();
 
-            {/* Page header */}
-            <div>
-                <h2 className="text-2xl font-bold text-gray-900">Ejecuciones</h2>
-                <p className="mt-1 text-sm text-gray-500">
-                    Historial completo de ejecuciones de automatizaciones.
-                </p>
+    if (loading) {
+      return (
+        <div className="page-container">
+          <div style={{ display: 'flex', alignItems: 'center',
+            justifyContent: 'center', height: 200,
+            color: 'var(--color-ink-muted)', fontSize: 13 }}>
+            Cargando datos…
+          </div>
+        </div>
+      );
+    }
+
+    return (
+        <div className="page-container">
+            <div className="page-header animate-fade-up" style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
+                <div>
+                    <h1 className="page-title">Ejecuciones</h1>
+                    <p className="page-subtitle">Historial completo de automatizaciones ejecutadas</p>
+                </div>
+                <div style={{ display: 'flex', gap: 8 }}>
+                    <button className="btn btn-outline"><Filter size={14} /> Filtrar</button>
+                    <button className="btn btn-orange"><Play size={14} /> Nuevo Run</button>
+                </div>
             </div>
 
-            {/* Table card */}
-            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-                <table className="w-full text-sm text-left">
+            <div className="card animate-fade-up delay-1">
+                <table className="data-table">
                     <thead>
-                        <tr className="border-b border-gray-100 bg-gray-50/60">
-                            <th className="px-6 py-3 text-xs font-semibold text-gray-400 uppercase tracking-wider">ID</th>
-                            <th className="px-6 py-3 text-xs font-semibold text-gray-400 uppercase tracking-wider">Automatización</th>
-                            <th className="px-6 py-3 text-xs font-semibold text-gray-400 uppercase tracking-wider">Estado</th>
+                        <tr>
+                            <th>ID Run</th>
+                            <th>Automatización</th>
+                            <th>Estado</th>
+                            <th>Fecha Inicio</th>
+                            <th>Duración</th>
+                            <th>Pasos</th>
+                            <th>Leads</th>
+                            <th></th>
                         </tr>
                     </thead>
-                    <tbody className="divide-y divide-gray-50">
-                        {runs.map((run) => (
-                            <tr key={run.id} className="hover:bg-gray-50/50 transition-colors">
-                                <td className="px-6 py-4">
-                                    <Link
-                                        to={`/runs/${run.id}`}
-                                        className="font-mono text-xs font-bold text-primary-600 hover:text-primary-700 hover:underline"
-                                    >
+                    <tbody>
+                        {runs.map((run, i) => (
+                            <tr key={run.id} style={{ animationDelay: `${0.05 * i}s` }}>
+                                <td>
+                                    <span style={{ fontFamily: 'DM Mono, monospace', fontSize: 12, color: 'var(--color-ink-muted)' }}>
                                         {run.id}
-                                    </Link>
-                                </td>
-                                <td className="px-6 py-4 text-gray-700 font-medium">{run.automatizacion_id}</td>
-                                <td className="px-6 py-4">
-                                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold ${estadoStyles[run.estado] ?? "bg-gray-100 text-gray-500"}`}>
-                                        {run.estado.replace("_", " ")}
                                     </span>
+                                </td>
+                                <td style={{ fontWeight: 500, color: 'var(--color-ink)' }}>{run.nombre}</td>
+                                <td><StatusBadge estado={run.estado} /></td>
+                                <td style={{ fontFamily: 'DM Mono, monospace', fontSize: 12 }}>{run.inicio}</td>
+                                <td style={{ fontFamily: 'DM Mono, monospace', fontSize: 12 }}>{run.duracion}</td>
+                                <td style={{ fontFamily: 'DM Mono, monospace', fontSize: 12, color: 'var(--color-ink-muted)' }}>{run.pasos}</td>
+                                <td>
+                                    {run.leads > 0
+                                        ? <span style={{ fontFamily: 'DM Mono, monospace', fontSize: 13, fontWeight: 600, color: 'var(--color-primary-500)' }}>{run.leads}</span>
+                                        : <span style={{ color: 'var(--color-ink-muted)' }}>—</span>
+                                    }
+                                </td>
+                                <td>
+                                    <Link to={`/runs/${run.id}`} className="btn btn-outline" style={{ fontSize: 11, padding: '4px 10px' }}>
+                                        Detalles →
+                                    </Link>
                                 </td>
                             </tr>
                         ))}
                     </tbody>
                 </table>
             </div>
-
         </div>
-    );
+    )
 }

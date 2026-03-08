@@ -1,49 +1,99 @@
-// ─────────────────────────────────────────────
-// Layout.jsx — Base shell: Sidebar + Main area
-// ─────────────────────────────────────────────
-import { useLocation } from "react-router-dom";
-import Sidebar from "./Sidebar";
+import { Outlet, NavLink, useLocation } from 'react-router-dom'
+import {
+    LayoutDashboard, Play, AlertTriangle, Users,
+    Settings, Bell, Search, HelpCircle, Zap
+} from 'lucide-react'
+import '../App.css'
 
-const getPageTitle = (pathname) => {
-    const titles = {
-        "/": "Dashboard",
-        "/runs": "Ejecuciones",
-        "/errors": "Errores",
-        "/leads": "Leads",
-    };
-    return titles[pathname] || "Dashboard";
-};
+const sidebarItems = [
+    { icon: LayoutDashboard, label: 'Dashboard', to: '/' },
+    { icon: Play, label: 'Ejecuciones', to: '/runs' },
+    { icon: AlertTriangle, label: 'Errores', to: '/errors' },
+    { icon: Users, label: 'Leads', to: '/leads' },
+]
 
-export default function Layout({ children }) {
-    const { pathname } = useLocation();
-    const pageTitle = getPageTitle(pathname);
+const sidebarBottom = [
+    { icon: HelpCircle, label: 'Ayuda' },
+    { icon: Settings, label: 'Ajustes' },
+]
+
+const topLinks = [
+    { label: 'Dashboard', to: '/' },
+    { label: 'Ejecuciones', to: '/runs' },
+    { label: 'Errores', to: '/errors' },
+    { label: 'Leads', to: '/leads' },
+]
+
+export default function Layout() {
+    const location = useLocation()
 
     return (
-        <div className="flex min-h-screen bg-cream">
+        <div className="app-shell">
+            {/* Sidebar vertical */}
+            <aside className="sidebar">
+                <div className="sidebar-logo">
+                    <Zap size={16} color="white" />
+                </div>
 
-            {/* ── Sidebar ── */}
-            <Sidebar />
+                <nav className="sidebar-nav">
+                    {sidebarItems.map(({ icon: Icon, label, to }) => (
+                        <NavLink
+                            key={to}
+                            to={to}
+                            end={to === '/'}
+                            className={({ isActive }) => `sidebar-item${isActive ? ' active' : ''}`}
+                        >
+                            <Icon size={18} />
+                            <span className="tooltip">{label}</span>
+                        </NavLink>
+                    ))}
+                </nav>
 
-            {/* ── Main content area ── */}
-            <div className="flex flex-col flex-1 overflow-hidden">
+                <div style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, padding: '0 10px 8px' }}>
+                    <div className="sidebar-divider" />
+                    {sidebarBottom.map(({ icon: Icon, label }) => (
+                        <button key={label} className="sidebar-item">
+                            <Icon size={18} />
+                            <span className="tooltip">{label}</span>
+                        </button>
+                    ))}
+                </div>
+            </aside>
 
-                {/* Top bar */}
-                <header className="h-14 flex items-center justify-between px-8 bg-white/80 backdrop-blur-md border-b border-orange-100/30 shadow-[0_1px_4px_rgba(0,0,0,0.01)]">
-                    <h1 className="text-sm font-bold text-gray-800 capitalize tracking-wide">
-                        {pageTitle}
-                    </h1>
-                    <div className="flex items-center gap-2">
-                        <div className="w-1.5 h-1.5 rounded-full bg-orange-500 animate-pulse" />
-                        <span className="text-[10px] font-extrabold text-orange-400 uppercase tracking-widest">Live System</span>
+            {/* Main */}
+            <div className="main-content">
+                {/* Topbar */}
+                <header className="topbar">
+                    <span style={{ fontSize: 14, fontWeight: 700, letterSpacing: '-0.3px', color: 'var(--color-ink)', whiteSpace: 'nowrap' }}>
+                        LEED
+                        <span style={{ color: 'var(--color-primary-500)', marginLeft: 1 }}>·</span>
+                    </span>
+
+                    <nav className="topbar-nav">
+                        {topLinks.map(({ label, to }) => (
+                            <NavLink
+                                key={to}
+                                to={to}
+                                end={to === '/'}
+                                className={({ isActive }) => `topbar-link${isActive ? ' active' : ''}`}
+                            >
+                                {label}
+                            </NavLink>
+                        ))}
+                    </nav>
+
+                    <div className="topbar-actions">
+                        <button className="icon-btn"><Search size={15} /></button>
+                        <button className="icon-btn"><Bell size={15} /></button>
+                        <div className="avatar">AG</div>
                     </div>
                 </header>
 
-                {/* Page content */}
-                <main className="flex-1 overflow-y-auto p-6">
-                    {children}
+                {/* Página activa */}
+                <main>
+                    <Outlet />
                 </main>
-
             </div>
         </div>
-    );
+    )
 }

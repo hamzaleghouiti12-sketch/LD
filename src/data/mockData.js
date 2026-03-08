@@ -1,227 +1,55 @@
-// ─────────────────────────────────────────────
-// MOCK DATA — LEED Dashboard
-// Scope: automatizaciones, runs, pasos, errors, leads
-// ─────────────────────────────────────────────
-
-export const automatizaciones = [
-    {
-        id: "auto-001",
-        nombre: "Enriquecimiento de Leads",
-        descripcion: "Valida y enriquece los datos de leads entrantes.",
-        estado: "activa",        // activa | pausada | error
-        creada_en: "2026-01-10T09:00:00Z",
-    },
-    {
-        id: "auto-002",
-        nombre: "Clasificación de Documentos",
-        descripcion: "Clasifica documentos según tipo y prioridad.",
-        estado: "pausada",
-        creada_en: "2026-01-20T14:30:00Z",
-    },
-];
+export const kpis = {
+    totalRuns: 1284,
+    successRate: 94.2,
+    activeLeads: 347,
+    errors: 74,
+    avgDuration: '2m 38s',
+    thisWeek: '+12%',
+}
 
 export const runs = [
-    {
-        id: "run-001",
-        automatizacion_id: "auto-001",
-        estado: "completado",    // completado | en_progreso | fallido | pendiente
-        inicio: "2026-02-19T08:00:00Z",
-        fin: "2026-02-19T08:03:42Z",
-        duracion_seg: 222,
-    },
-    {
-        id: "run-002",
-        automatizacion_id: "auto-001",
-        estado: "fallido",
-        inicio: "2026-02-19T09:15:00Z",
-        fin: "2026-02-19T09:15:58Z",
-        duracion_seg: 58,
-    },
-    {
-        id: "run-003",
-        automatizacion_id: "auto-001",
-        estado: "en_progreso",
-        inicio: "2026-02-19T10:30:00Z",
-        fin: null,
-        duracion_seg: null,
-    },
-    {
-        id: "run-004",
-        automatizacion_id: "auto-002",
-        estado: "completado",
-        inicio: "2026-02-18T14:00:00Z",
-        fin: "2026-02-18T14:07:10Z",
-        duracion_seg: 430,
-    },
-    {
-        id: "run-005",
-        automatizacion_id: "auto-002",
-        estado: "pendiente",
-        inicio: null,
-        fin: null,
-        duracion_seg: null,
-    },
-];
+    { id: 'RUN-001', nombre: 'Scraping LinkedIn B2B', estado: 'completado', inicio: '2025-06-10 09:14', duracion: '3m 12s', pasos: 8, leads: 24 },
+    { id: 'RUN-002', nombre: 'Enrichment HubSpot', estado: 'error', inicio: '2025-06-10 10:02', duracion: '1m 04s', pasos: 4, leads: 0 },
+    { id: 'RUN-003', nombre: 'Outreach Email Sequence', estado: 'ejecutando', inicio: '2025-06-10 11:30', duracion: '—', pasos: 12, leads: 7 },
+    { id: 'RUN-004', nombre: 'Lead Scoring Automation', estado: 'completado', inicio: '2025-06-09 16:45', duracion: '5m 51s', pasos: 6, leads: 55 },
+    { id: 'RUN-005', nombre: 'CRM Sync Salesforce', estado: 'pendiente', inicio: '2025-06-10 12:00', duracion: '—', pasos: 5, leads: 0 },
+    { id: 'RUN-006', nombre: 'AI Qualifier GPT-4', estado: 'completado', inicio: '2025-06-09 14:22', duracion: '2m 09s', pasos: 9, leads: 31 },
+]
 
-export const pasos = [
-    // run-001
-    {
-        id: "paso-001",
-        run_id: "run-001",
-        nombre: "Verificar email",
-        estado: "ok",            // ok | error | omitido
-        orden: 1,
-        duracion_seg: 12,
-        mensaje: null,
-    },
-    {
-        id: "paso-002",
-        run_id: "run-001",
-        nombre: "Enriquecer con API",
-        estado: "ok",
-        orden: 2,
-        duracion_seg: 210,
-        mensaje: null,
-    },
-    // run-002
-    {
-        id: "paso-003",
-        run_id: "run-002",
-        nombre: "Verificar email",
-        estado: "ok",
-        orden: 1,
-        duracion_seg: 8,
-        mensaje: null,
-    },
-    {
-        id: "paso-004",
-        run_id: "run-002",
-        nombre: "Enriquecer con API",
-        estado: "error",
-        orden: 2,
-        duracion_seg: 50,
-        mensaje: "Timeout al conectar con la API externa.",
-    },
-    // run-003
-    {
-        id: "paso-005",
-        run_id: "run-003",
-        nombre: "Verificar email",
-        estado: "ok",
-        orden: 1,
-        duracion_seg: 9,
-        mensaje: null,
-    },
-    {
-        id: "paso-006",
-        run_id: "run-003",
-        nombre: "Enriquecer con API",
-        estado: "omitido",
-        orden: 2,
-        duracion_seg: null,
-        mensaje: "En espera de respuesta.",
-    },
-    // run-004
-    {
-        id: "paso-007",
-        run_id: "run-004",
-        nombre: "Clasificar documento",
-        estado: "ok",
-        orden: 1,
-        duracion_seg: 30,
-        mensaje: null,
-    },
-    {
-        id: "paso-008",
-        run_id: "run-004",
-        nombre: "Asignar prioridad",
-        estado: "ok",
-        orden: 2,
-        duracion_seg: 400,
-        mensaje: null,
-    },
-    // run-005
-    {
-        id: "paso-009",
-        run_id: "run-005",
-        nombre: "Clasificar documento",
-        estado: "omitido",
-        orden: 1,
-        duracion_seg: null,
-        mensaje: "Run pendiente de inicio.",
-    },
-    {
-        id: "paso-010",
-        run_id: "run-005",
-        nombre: "Asignar prioridad",
-        estado: "omitido",
-        orden: 2,
-        duracion_seg: null,
-        mensaje: "Run pendiente de inicio.",
-    },
-];
+export const runSteps = [
+    { id: 1, titulo: 'Inicializar conexión API', estado: 'completado', duracion: '0.4s', log: 'Conexión establecida con LinkedIn API v2' },
+    { id: 2, titulo: 'Autenticación OAuth 2.0', estado: 'completado', duracion: '0.7s', log: 'Token válido hasta 2025-06-11' },
+    { id: 3, titulo: 'Extracción de perfiles (pág. 1–5)', estado: 'completado', duracion: '38.2s', log: '120 perfiles extraídos' },
+    { id: 4, titulo: 'Filtro por criterios ICP', estado: 'completado', duracion: '1.1s', log: '24 coincidencias con ICP definido' },
+    { id: 5, titulo: 'Enriquecimiento con Clearbit', estado: 'completado', duracion: '12.4s', log: 'Email corporativo obtenido en 22/24' },
+    { id: 6, titulo: 'Guardado en base de datos', estado: 'completado', duracion: '0.9s', log: '24 leads insertados en tabla leads' },
+    { id: 7, titulo: 'Notificación Slack', estado: 'completado', duracion: '0.3s', log: 'Mensaje enviado a #ops-leed' },
+    { id: 8, titulo: 'Finalizar y registrar run', estado: 'completado', duracion: '0.2s', log: 'Run RUN-001 cerrado OK' },
+]
 
 export const errors = [
-    {
-        id: "err-001",
-        run_id: "run-002",
-        paso_id: "paso-004",
-        tipo: "Conectividad",
-        mensaje: "Timeout al conectar con la API externa.",
-        gravedad: "alta",
-        fecha: "2026-02-19T09:15:58Z",
-    },
-    {
-        id: "err-002",
-        run_id: "run-001",
-        paso_id: "paso-001",
-        tipo: "Validación",
-        mensaje: "El campo email no tiene un formato válido.",
-        gravedad: "media",
-        fecha: "2026-02-19T08:00:12Z",
-    },
-    {
-        id: "err-003",
-        run_id: "run-004",
-        paso_id: "paso-007",
-        tipo: "Autenticación",
-        mensaje: "Token de acceso expirado al clasificar documento.",
-        gravedad: "alta",
-        fecha: "2026-02-18T14:00:31Z",
-    },
-];
+    { id: 'ERR-041', run: 'RUN-002', tipo: 'Auth Error', mensaje: 'Token HubSpot expirado', fecha: '2025-06-10 10:03', critico: true },
+    { id: 'ERR-040', run: 'RUN-007', tipo: 'Timeout', mensaje: 'La API de Clearbit no respondió en 30s', fecha: '2025-06-09 18:45', critico: false },
+    { id: 'ERR-039', run: 'RUN-005', tipo: 'Rate Limit', mensaje: 'LinkedIn bloqueó petición (429)', fecha: '2025-06-09 14:12', critico: false },
+    { id: 'ERR-038', run: 'RUN-003', tipo: 'Parse Error', mensaje: 'Schema JSON inesperado en resp. Salesforce', fecha: '2025-06-08 11:30', critico: true },
+    { id: 'ERR-037', run: 'RUN-010', tipo: 'DB Error', mensaje: 'Duplicado en campo email_hash', fecha: '2025-06-07 09:00', critico: false },
+]
 
 export const leads = [
-    {
-        id: "lead-001",
-        nombre: "Juan Perez",
-        empresa: "Tech Solutions",
-        email: "juan@tech.com",
-        score: 85,
-        estado: "enriquecido",
-    },
-    {
-        id: "lead-002",
-        nombre: "Maria Garcia",
-        empresa: "Data Corp",
-        email: "m.garcia@datacorp.io",
-        score: null,
-        estado: "pendiente",
-    },
-    {
-        id: "lead-003",
-        nombre: "Carlos Romero",
-        empresa: "Inversiones Sur",
-        email: "c.romero@inversur.com",
-        score: 72,
-        estado: "enriquecido",
-    },
-    {
-        id: "lead-004",
-        nombre: "Laura Vidal",
-        empresa: "Nexo Digital",
-        email: "lvidal@nexodigital.es",
-        score: 91,
-        estado: "enriquecido",
-    },
-];
+    { id: 'L-001', nombre: 'Sara Martínez', empresa: 'Fintech Nova', cargo: 'VP de Ventas', email: 's.martinez@nova.io', score: 94, estado: 'Calificado', fuente: 'LinkedIn' },
+    { id: 'L-002', nombre: 'Carlos Ruiz', empresa: 'PropTech Layer', cargo: 'CEO', email: 'carlos@layer.ai', score: 87, estado: 'Contactado', fuente: 'Outreach' },
+    { id: 'L-003', nombre: 'Elena Voss', empresa: 'HealthAI GmbH', cargo: 'CTO', email: 'e.voss@healthai.de', score: 81, estado: 'Negociando', fuente: 'LinkedIn' },
+    { id: 'L-004', nombre: 'James Park', empresa: 'LogiSync', cargo: 'Head of Ops', email: 'j.park@logisync.com', score: 72, estado: 'Nuevo', fuente: 'Scraping' },
+    { id: 'L-005', nombre: 'Amara Diallo', empresa: 'EdTech Africa', cargo: 'CMO', email: 'amara@edtechafrica.com', score: 68, estado: 'Nuevo', fuente: 'LinkedIn' },
+    { id: 'L-006', nombre: 'Tomás Herrero', empresa: 'Retail AI', cargo: 'Director TI', email: 't.herrero@retailai.es', score: 91, estado: 'Calificado', fuente: 'CRM' },
+]
+
+export const weeklyActivity = [
+    { dia: 'Lun', runs: 48, leads: 62, errores: 3 },
+    { dia: 'Mar', runs: 72, leads: 88, errores: 5 },
+    { dia: 'Mié', runs: 55, leads: 74, errores: 2 },
+    { dia: 'Jue', runs: 91, leads: 120, errores: 8 },
+    { dia: 'Vie', runs: 63, leads: 95, errores: 4 },
+    { dia: 'Sáb', runs: 21, leads: 30, errores: 1 },
+    { dia: 'Dom', runs: 14, leads: 18, errores: 0 },
+]

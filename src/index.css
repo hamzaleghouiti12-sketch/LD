@@ -1,17 +1,72 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=DM+Mono:wght@300;400;500&display=swap');
 
 @theme {
+    /* Brand palette */
     --color-primary-50: #fff7ed;
     --color-primary-100: #ffedd5;
+    --color-primary-200: #fed7aa;
+    --color-primary-400: #fb923c;
     --color-primary-500: #f97316;
     --color-primary-600: #ea580c;
-    --color-cream: #f8f7f4;
+
+    /* Surface palette */
+    --color-cream: #f5f3ef;
+    --color-cream-dark: #edeae4;
+    --color-sand: #e8e4dc;
+    --color-ink: #1a1917;
+    --color-ink-soft: #3d3b38;
+    --color-ink-muted: #8a8680;
+
+    /* Status */
+    --color-success: #22c55e;
+    --color-warning: #f59e0b;
+    --color-danger: #ef4444;
+    --color-info: #3b82f6;
 }
 
 @layer base {
+
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box;
+    }
+
+    html {
+        scroll-behavior: smooth;
+    }
+
     body {
-        font-family: 'Inter', sans-serif;
-        @apply bg-cream text-gray-900 antialiased;
+        font-family: 'DM Sans', system-ui, sans-serif;
+        background-color: var(--color-cream);
+        color: var(--color-ink);
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        margin: 0;
+    }
+
+    /* Mono for data/numbers */
+    .font-mono {
+        font-family: 'DM Mono', 'Courier New', monospace;
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+        width: 4px;
+        height: 4px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: var(--color-sand);
+        border-radius: 99px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: var(--color-ink-muted);
     }
 }

@@ -3,7 +3,6 @@
 // ─────────────────────────────────────────────
 import {
     LayoutDashboard,
-    Zap,
     Play,
     AlertCircle,
     Users,
@@ -26,7 +25,6 @@ const bottomItems = [
 
 export default function Sidebar() {
     const { pathname } = useLocation();
-    const getActiveClass = (path) => pathname === path ? "active" : "";
     return (
         <aside className="flex flex-col items-center justify-between w-18 min-h-screen bg-white border-r border-orange-100/50 py-8 shadow-[1px_0_10px_rgba(0,0,0,0.01)]">
 

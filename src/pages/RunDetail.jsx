@@ -1,104 +1,112 @@
-import { useParams, Link } from "react-router-dom";
-import { runs, pasos } from "../data/mockData";
+import { useParams, Link } from 'react-router-dom'
+import { runs, runSteps } from '../data/mockData'
+import StatusBadge from '../components/StatusBadge'
+import { CheckCircle, XCircle, Clock, ChevronLeft } from 'lucide-react'
 
-const pasoEstadoStyles = {
-    ok: "bg-emerald-50 text-emerald-700",
-    error: "bg-red-50 text-red-700",
-    omitido: "bg-gray-100 text-gray-400",
-};
+const stepIcon = (estado) => {
+    if (estado === 'completado') return <CheckCircle size={14} color="#16a34a" />
+    if (estado === 'error') return <XCircle size={14} color="#dc2626" />
+    return <Clock size={14} color="#d97706" />
+}
+
+const stepDotStyle = (estado) => {
+    const base = { width: 28, height: 28, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }
+    if (estado === 'completado') return { ...base, background: 'rgba(34,197,94,0.12)', border: '1.5px solid rgba(34,197,94,0.3)' }
+    if (estado === 'error') return { ...base, background: 'rgba(239,68,68,0.12)', border: '1.5px solid rgba(239,68,68,0.3)' }
+    return { ...base, background: 'rgba(245,158,11,0.12)', border: '1.5px solid rgba(245,158,11,0.3)' }
+}
 
 export default function RunDetail() {
-    const { id } = useParams();
-    const run = runs.find((r) => r.id === id);
-
-    if (!run) {
-        return (
-            <div className="max-w-5xl mx-auto space-y-4 py-12 text-center">
-                <p className="text-gray-500">No se encontró la ejecución solicitada.</p>
-                <Link to="/runs" className="text-sm font-semibold text-primary-600 hover:underline">
-                    ← Volver al listado
-                </Link>
-            </div>
-        );
-    }
-
-    const runSteps = pasos
-        .filter((p) => p.run_id === id)
-        .sort((a, b) => a.orden - b.orden);
+    const { id } = useParams()
+    const run = runs.find(r => r.id === id) || runs[0]
 
     return (
-        <div className="max-w-5xl mx-auto space-y-8">
-
-            {/* Back + header */}
-            <div className="space-y-3">
-                <Link
-                    to="/runs"
-                    className="text-xs font-semibold text-gray-400 hover:text-primary-600 transition-colors"
-                >
-                    ← Volver a Ejecuciones
+        <div className="page-container">
+            <div className="animate-fade-up" style={{ marginBottom: 20 }}>
+                <Link to="/runs" className="btn btn-outline" style={{ fontSize: 12, marginBottom: 16, display: 'inline-flex' }}>
+                    <ChevronLeft size={14} /> Volver a Ejecuciones
                 </Link>
-                <div className="flex items-center gap-3">
-                    <h2 className="text-2xl font-bold text-gray-900">Detalle de Ejecución</h2>
-                    <span className="font-mono text-xs text-gray-400">{run.id}</span>
+
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
+                    <h1 className="page-title" style={{ margin: 0 }}>{run.nombre}</h1>
+                    <StatusBadge estado={run.estado} />
+                    <span style={{ fontFamily: 'DM Mono, monospace', fontSize: 12, color: 'var(--color-ink-muted)', marginLeft: 'auto' }}>
+                        {run.id}
+                    </span>
                 </div>
+                <p className="page-subtitle" style={{ marginTop: 4 }}>
+                    Inicio: {run.inicio} · Duración: {run.duracion} · {run.pasos} pasos · {run.leads} leads generados
+                </p>
             </div>
 
-            {/* Run metadata card */}
-            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
-                <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-4">
-                    Información del Run
-                </h3>
-                <dl className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                    {[
-                        { label: "Automatización", value: run.automatizacion_id },
-                        { label: "Estado", value: run.estado },
-                        { label: "Duración", value: run.duracion_seg ? `${run.duracion_seg}s` : "N/A" },
-                        { label: "Inicio", value: run.inicio ? new Date(run.inicio).toLocaleString() : "Pendiente" },
-                        { label: "Fin", value: run.fin ? new Date(run.fin).toLocaleString() : "N/A" },
-                    ].map(({ label, value }) => (
-                        <div key={label}>
-                            <dt className="text-xs text-gray-400 font-medium mb-0.5">{label}</dt>
-                            <dd className="text-sm font-semibold text-gray-800">{value}</dd>
-                        </div>
-                    ))}
-                </dl>
-            </div>
-
-            {/* Steps list */}
-            <div className="space-y-3">
-                <h3 className="text-base font-bold text-gray-900">Pasos de la Ejecución</h3>
-
-                <div className="bg-white rounded-2xl border border-gray-100 shadow-sm divide-y divide-gray-50 overflow-hidden">
-                    {runSteps.length === 0 ? (
-                        <p className="px-6 py-8 text-sm text-center text-gray-400">
-                            No hay pasos registrados para esta ejecución.
-                        </p>
-                    ) : (
-                        runSteps.map((paso) => (
-                            <div key={paso.id} className="flex items-center justify-between px-6 py-4 hover:bg-gray-50/50 transition-colors">
-                                <div className="flex items-center gap-4">
-                                    <span className="text-xs font-bold text-gray-300 w-4 shrink-0">{paso.orden}</span>
-                                    <div>
-                                        <p className="text-sm font-semibold text-gray-800">{paso.nombre}</p>
-                                        {paso.mensaje && (
-                                            <p className="text-xs text-gray-400 mt-0.5">{paso.mensaje}</p>
-                                        )}
+            <div className="two-col">
+                {/* Timeline de pasos */}
+                <div className="card animate-fade-up delay-1">
+                    <div className="card-header">
+                        <h3 className="card-title">Pipeline de Pasos</h3>
+                        <span style={{ fontSize: 12, color: 'var(--color-ink-muted)', fontFamily: 'DM Mono, monospace' }}>
+                            {runSteps.filter(s => s.estado === 'completado').length}/{runSteps.length}
+                        </span>
+                    </div>
+                    <div className="card-body">
+                        <div className="steps-list">
+                            {runSteps.map((step, i) => (
+                                <div key={step.id} className="step-item">
+                                    <div className="step-line-col">
+                                        <div style={stepDotStyle(step.estado)}>
+                                            {stepIcon(step.estado)}
+                                        </div>
+                                        {i < runSteps.length - 1 && <div className="step-connector" />}
+                                    </div>
+                                    <div className="step-content">
+                                        <p className="step-title">{step.titulo}</p>
+                                        <p className="step-meta">{step.log}</p>
+                                        <p className="step-meta" style={{ marginTop: 2 }}>
+                                            ⏱ {step.duracion}
+                                        </p>
                                     </div>
                                 </div>
-                                <div className="flex items-center gap-4 shrink-0">
-                                    {paso.duracion_seg && (
-                                        <span className="text-xs text-gray-400">{paso.duracion_seg}s</span>
-                                    )}
-                                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold ${pasoEstadoStyles[paso.estado] ?? "bg-gray-100 text-gray-500"}`}>
-                                        {paso.estado}
+                            ))}
+                        </div>
+                    </div>
+                </div>
+
+                {/* Info del run */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+                    <div className="card animate-fade-up delay-2">
+                        <div className="card-header">
+                            <h3 className="card-title">Resumen</h3>
+                        </div>
+                        <div className="card-body" style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+                            {[
+                                { label: 'Estado', value: <StatusBadge estado={run.estado} /> },
+                                { label: 'Inicio', value: run.inicio },
+                                { label: 'Duración total', value: run.duracion },
+                                { label: 'Pasos ejecutados', value: `${run.pasos} pasos` },
+                                { label: 'Leads generados', value: run.leads > 0 ? run.leads : '—' },
+                            ].map(({ label, value }) => (
+                                <div key={label} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: 13 }}>
+                                    <span style={{ color: 'var(--color-ink-muted)', fontWeight: 500 }}>{label}</span>
+                                    <span style={{ fontWeight: 500, color: 'var(--color-ink)', fontFamily: typeof value === 'string' ? 'DM Mono, monospace' : 'inherit', fontSize: 12.5 }}>
+                                        {value}
                                     </span>
                                 </div>
-                            </div>
-                        ))
-                    )}
+                            ))}
+                        </div>
+                    </div>
+
+                    <div className="card animate-fade-up delay-3">
+                        <div className="card-header">
+                            <h3 className="card-title">Acciones</h3>
+                        </div>
+                        <div className="card-body" style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                            <button className="btn btn-orange" style={{ justifyContent: 'center' }}>↻ Re-ejecutar Run</button>
+                            <button className="btn btn-outline" style={{ justifyContent: 'center' }}>⬇ Exportar Log</button>
+                            <button className="btn btn-outline" style={{ justifyContent: 'center', color: '#dc2626' }}>✕ Archivar</button>
+                        </div>
+                    </div>
                 </div>
             </div>
-
         </div>
-    );
+    )
 }

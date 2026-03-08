@@ -1,53 +1,35 @@
-// ─────────────────────────────────────────────
-// calculations.js — KPI helper functions
-// ─────────────────────────────────────────────
-
-/**
- * Returns the total number of runs.
- * @param {Array} runs - Array of run objects from mockData.js
- * @returns {number}
- */
-export function getTotalRuns(runs) {
-    return runs.length;
+export function calcSuccessRate(runs) {
+    if (!runs || runs.length === 0) return 0
+    const ok = runs.filter(r => r.estado === 'completado').length
+    return Math.round((ok / runs.length) * 100 * 10) / 10
 }
 
-/**
- * Returns the success rate as a percentage (0–100).
- * A run is considered successful if estado === "completado".
- * @param {Array} runs - Array of run objects from mockData.js
- * @returns {number} percentage rounded to 1 decimal
- */
-export function getSuccessRate(runs) {
-    if (runs.length === 0) return 0;
-    const completados = runs.filter((run) => run.estado === "completado").length;
-    return Math.round((completados / runs.length) * 1000) / 10;
+export function calcTotalLeads(runs) {
+    return runs.reduce((sum, r) => sum + (r.leads || 0), 0)
 }
 
-/**
- * Returns the total number of steps (pasos).
- * @param {Array} steps - Array of paso objects from mockData.js
- * @returns {number}
- */
-export function getTotalSteps(steps) {
-    return steps.length;
+export function calcErrorCount(runs) {
+    return runs.filter(r => r.estado === 'error').length
 }
 
-/**
- * Returns the total number of errors.
- * @param {Array} errors - Array of error objects from mockData.js
- * @returns {number}
- */
-export function getTotalErrors(errors) {
-    if (!Array.isArray(errors)) return 0;
-    return errors.length;
+export function groupByWeek(runs) {
+    // Agrupa runs por día de la semana (mockeable)
+    return runs.reduce((acc, run) => {
+        const day = new Date(run.inicio).toLocaleDateString('es-ES', { weekday: 'short' })
+        acc[day] = (acc[day] || 0) + 1
+        return acc
+    }, {})
 }
 
-/**
- * Returns the total number of leads.
- * @param {Array} leads - Array of lead objects from mockData.js
- * @returns {number}
- */
-export function getTotalLeads(leads) {
-    if (!Array.isArray(leads)) return 0;
-    return leads.length;
+export function calcAvgDuration(runs) {
+    const withDuration = runs.filter(r => r.duracion && r.duracion !== '—')
+    if (!withDuration.length) return '—'
+    const toSeconds = (d) => {
+        const [m, s] = d.replace('m', '').replace('s', '').split(' ')
+        return parseInt(m) * 60 + parseInt(s)
+    }
+    const avg = withDuration.reduce((s, r) => s + toSeconds(r.duracion), 0) / withDuration.length
+    const m = Math.floor(avg / 60)
+    const s = Math.round(avg % 60)
+    return `${m}m ${s}s`
 }

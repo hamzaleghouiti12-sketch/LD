@@ -1,68 +1,103 @@
-import { leads } from "../data/mockData";
+import { leads } from '../data/mockData'
+import { Users, Download } from 'lucide-react'
 
-const estadoStyles = {
-    enriquecido: "bg-emerald-50 text-emerald-700",
-    pendiente: "bg-gray-100 text-gray-500",
-};
+function ScorePill({ score }) {
+    const color = score >= 90 ? '#16a34a' : score >= 75 ? 'var(--color-primary-500)' : '#d97706'
+    const bg = score >= 90 ? 'rgba(34,197,94,0.1)' : score >= 75 ? 'rgba(249,115,22,0.1)' : 'rgba(245,158,11,0.1)'
+    return (
+        <span style={{
+            fontFamily: 'DM Mono, monospace',
+            fontSize: 12,
+            fontWeight: 600,
+            color,
+            background: bg,
+            padding: '3px 9px',
+            borderRadius: 99,
+        }}>
+            {score}
+        </span>
+    )
+}
+
+const estadoStyle = {
+    'Calificado': { bg: 'rgba(34,197,94,0.1)', color: '#16a34a' },
+    'Contactado': { bg: 'rgba(59,130,246,0.1)', color: '#2563eb' },
+    'Negociando': { bg: 'rgba(249,115,22,0.1)', color: 'var(--color-primary-600)' },
+    'Nuevo': { bg: 'var(--color-cream-dark)', color: 'var(--color-ink-muted)' },
+}
 
 export default function Leads() {
     return (
-        <div className="max-w-5xl mx-auto space-y-6">
-
-            {/* Page header */}
-            <div>
-                <h2 className="text-2xl font-bold text-gray-900">Gestión de Leads</h2>
-                <p className="mt-1 text-sm text-gray-500">
-                    Listado de prospectos procesados y enriquecidos.
-                </p>
+        <div className="page-container">
+            <div className="page-header animate-fade-up" style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
+                <div>
+                    <h1 className="page-title">Leads Enriquecidos</h1>
+                    <p className="page-subtitle">{leads.length} leads · Ordenados por score</p>
+                </div>
+                <div style={{ display: 'flex', gap: 8 }}>
+                    <button className="btn btn-outline"><Download size={14} /> Exportar CSV</button>
+                    <button className="btn btn-primary"><Users size={14} /> Sincronizar CRM</button>
+                </div>
             </div>
 
-            {/* Table card */}
-            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-                <table className="w-full text-sm text-left">
+            <div className="card animate-fade-up delay-1">
+                <table className="data-table">
                     <thead>
-                        <tr className="border-b border-gray-100 bg-gray-50/60">
-                            <th className="px-6 py-3 text-xs font-semibold text-gray-400 uppercase tracking-wider">Nombre</th>
-                            <th className="px-6 py-3 text-xs font-semibold text-gray-400 uppercase tracking-wider">Empresa</th>
-                            <th className="px-6 py-3 text-xs font-semibold text-gray-400 uppercase tracking-wider">Email</th>
-                            <th className="px-6 py-3 text-xs font-semibold text-gray-400 uppercase tracking-wider">Lead Score</th>
-                            <th className="px-6 py-3 text-xs font-semibold text-gray-400 uppercase tracking-wider">Estado</th>
+                        <tr>
+                            <th>Contacto</th>
+                            <th>Empresa</th>
+                            <th>Cargo</th>
+                            <th>Email</th>
+                            <th>Score</th>
+                            <th>Estado</th>
+                            <th>Fuente</th>
                         </tr>
                     </thead>
-                    <tbody className="divide-y divide-gray-50">
-                        {leads.length === 0 ? (
-                            <tr>
-                                <td colSpan="5" className="px-6 py-10 text-center text-gray-400">
-                                    No hay leads registrados en el sistema.
-                                </td>
-                            </tr>
-                        ) : (
-                            leads.map((lead) => (
-                                <tr key={lead.id} className="hover:bg-gray-50/50 transition-colors">
-                                    <td className="px-6 py-4 font-semibold text-gray-800">{lead.nombre}</td>
-                                    <td className="px-6 py-4 text-gray-600">{lead.empresa}</td>
-                                    <td className="px-6 py-4 text-gray-500">{lead.email}</td>
-                                    <td className="px-6 py-4">
-                                        {lead.score != null ? (
-                                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-primary-50 text-primary-700">
-                                                {lead.score}
+                    <tbody>
+                        {leads
+                            .sort((a, b) => b.score - a.score)
+                            .map(lead => {
+                                const st = estadoStyle[lead.estado] || estadoStyle['Nuevo']
+                                return (
+                                    <tr key={lead.id}>
+                                        <td>
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                                                <div style={{
+                                                    width: 30, height: 30, borderRadius: '50%',
+                                                    background: `hsl(${(lead.nombre.charCodeAt(0) * 7) % 360}, 60%, 75%)`,
+                                                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                                    fontSize: 11, fontWeight: 700, color: 'white', flexShrink: 0,
+                                                }}>
+                                                    {lead.nombre.split(' ').map(n => n[0]).join('').slice(0, 2)}
+                                                </div>
+                                                <span style={{ fontWeight: 500, color: 'var(--color-ink)' }}>{lead.nombre}</span>
+                                            </div>
+                                        </td>
+                                        <td style={{ fontWeight: 500 }}>{lead.empresa}</td>
+                                        <td style={{ color: 'var(--color-ink-muted)' }}>{lead.cargo}</td>
+                                        <td>
+                                            <span style={{ fontFamily: 'DM Mono, monospace', fontSize: 11.5 }}>{lead.email}</span>
+                                        </td>
+                                        <td><ScorePill score={lead.score} /></td>
+                                        <td>
+                                            <span style={{
+                                                display: 'inline-block',
+                                                fontSize: 11.5, fontWeight: 600,
+                                                padding: '3px 9px', borderRadius: 99,
+                                                background: st.bg, color: st.color,
+                                            }}>
+                                                {lead.estado}
                                             </span>
-                                        ) : (
-                                            <span className="text-xs text-gray-300 font-medium">—</span>
-                                        )}
-                                    </td>
-                                    <td className="px-6 py-4">
-                                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold ${estadoStyles[lead.estado] ?? "bg-gray-100 text-gray-500"}`}>
-                                            {lead.estado}
-                                        </span>
-                                    </td>
-                                </tr>
-                            ))
-                        )}
+                                        </td>
+                                        <td>
+                                            <span className="chip">{lead.fuente}</span>
+                                        </td>
+                                    </tr>
+                                )
+                            })}
                     </tbody>
                 </table>
             </div>
-
         </div>
-    );
+    )
 }
